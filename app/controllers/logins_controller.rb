@@ -17,6 +17,13 @@ class LoginsController < ApplicationController
     end
   end
 
+  def destroy
+    session.delete(:current_user_id)
+
+    @_current_user = nil
+    redirect_to root
+  end
+
   private
 
   def login_params
