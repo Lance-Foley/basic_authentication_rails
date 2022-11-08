@@ -2,11 +2,11 @@ class PostsController < ApplicationController
   before_action :valid_user_presence, only: [:new, :edit, :update, :destroy]
   before_action :set_post, only: [:show, :edit, :update, :destroy]
   def index
+    @user = User.find_by(id: session[:user_id])
     @posts = Post.all
   end
   def new
     @post = Post.new
-
   end
 
   def create
@@ -20,15 +20,10 @@ class PostsController < ApplicationController
   end
 
   def show
-
   end
-
-
 
   def edit
   end
-
-
 
   def update
     @post = Post.find(params[:id])
@@ -45,7 +40,6 @@ class PostsController < ApplicationController
 
     redirect_to post_path, status: :see_other
   end
-
 
   private
 
