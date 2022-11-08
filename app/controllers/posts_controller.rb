@@ -1,6 +1,7 @@
 class PostsController < ApplicationController
   before_action :valid_user_presence, only: [:new, :edit, :update, :destroy]
   before_action :set_post, only: [:show, :edit, :update, :destroy]
+  before_action :correct_user, only: [:edit, :update, :destroy]
   def index
     @user = User.find_by(id: session[:user_id])
     @posts = Post.all
@@ -41,10 +42,19 @@ class PostsController < ApplicationController
     redirect_to post_path, status: :see_other
   end
 
+  def correct_user
+    @post = Post.find(params[:id])
+    @user = User.find_by(id: session[:user_id])
+    if @user.id != @post.user_id
+      redirect_to posts_path
+      flash[:notice] = "You are not authorized to edit that post"
+    end
+  end
   private
 
   def set_post
     @post = Post.find(params[:id])
+
   end
 
   def post_params
